@@ -10,7 +10,7 @@ function customPlugin(store) {
   })
 }
 
-export default createStore({
+const store = createStore({
   plugins: [customPlugin],
   strict: true,
   state: {
@@ -47,19 +47,19 @@ export default createStore({
           state.count += payload
         },
       },
-      modules: {
-        cCount: {
-          namespaced: true,
-          state: {
-            count: 0,
-          },
-          mutations: {
-            add(state, payload) {
-              state.count += payload
-            },
-          },
-        },
-      },
+      // modules: {
+      //   cCount: {
+      //     namespaced: true,
+      //     state: {
+      //       count: 0,
+      //     },
+      //     mutations: {
+      //       add(state, payload) {
+      //         state.count += payload
+      //       },
+      //     },
+      //   },
+      // },
     },
     bCount: {
       namespaced: true,
@@ -74,3 +74,17 @@ export default createStore({
     },
   },
 })
+
+store.registerModule(['aCount', 'cCount'], {
+  namespaced: true,
+  state: {
+    count: 0,
+  },
+  mutations: {
+    add(state, payload) {
+      state.count += payload
+    },
+  },
+})
+
+export default store

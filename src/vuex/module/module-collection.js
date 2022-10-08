@@ -26,6 +26,8 @@ export default class ModuleCollection {
     }
     console.log(this.root)
     console.log(path)
+
+    return newModule
   }
 
   getNameSpaced(path) {
