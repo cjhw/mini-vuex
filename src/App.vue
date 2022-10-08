@@ -20,6 +20,8 @@ const double = computed(() => store.getters.double)
 const aCount = computed(() => store.state.aCount.count)
 
 const bCount = computed(() => store.state.bCount.count)
+
+const cCount = computed(() => store.state.aCount.cCount.count)
 </script>
 
 <template>
@@ -33,8 +35,13 @@ const bCount = computed(() => store.state.bCount.count)
   异步修改: <button @click="asyncAdd">+1</button>
   <hr />
   a模块: {{ aCount }}
+  <button @click="$store.commit('aCount/add', 1)">修改a模块 +1</button>
   <hr />
   b模块: {{ bCount }}
+  <button @click="$store.commit('bCount/add', 1)">修改b模块 +1</button>
+  <hr />
+  c模块: {{ cCount }}
+  <button @click="$store.commit('aCount/cCount/add', 1)">修改c模块 +1</button>
 </template>
 
 <style scoped>
