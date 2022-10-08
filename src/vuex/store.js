@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { storeKey } from './injectKey'
 import ModuleCollection from './module/module-collection'
 import { forEachValue, isPromise } from './utils'
@@ -62,6 +62,28 @@ function resetStoreState(store, state) {
       enumerable: true,
     })
   })
+
+  if (store.strict) {
+    enableStrictMode(store)
+  }
+}
+
+function enableStrictMode(store) {
+  watch(
+    () => store._state.data,
+    () => {
+      console.assert(
+        store._commiting,
+        'do not mutate vuex store state outside mutation handlers'
+      )
+    },
+    {
+      // 数据变化，执行回调
+      deep: true,
+      // 默认是异步的，改成同步的
+      flush: 'sync',
+    }
+  )
 }
 
 export default class Store {
@@ -71,6 +93,10 @@ export default class Store {
     store._actions = Object.create(null)
     store._mutations = Object.create(null)
     store._wrappedGetters = Object.create(null)
+
+    this.strict = options.strict || false
+
+    this._commiting = false
 
     const state = store._modules.root.state
     // 模块安装
@@ -85,9 +111,18 @@ export default class Store {
     return this._state.data
   }
 
+  _withCommit(fn) {
+    const commiting = this._commiting
+    this._commiting = true
+    fn()
+    this._commiting = commiting
+  }
+
   commit = (type, payload) => {
     const entry = this._mutations[type] || []
-    entry && entry.forEach((handler) => handler(payload))
+    this._withCommit(() => {
+      entry && entry.forEach((handler) => handler(payload))
+    })
   }
 
   dispatch = (type, payload) => {

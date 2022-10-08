@@ -26,7 +26,7 @@ const cCount = computed(() => store.state.aCount.cCount.count)
 
 <template>
   <div>计数器:{{ count }} {{ $store.state.count }}</div>
-  <button @click="$store.state.count++">+1</button>
+  错误修改 <button @click="$store.state.count++">+1</button>
   <hr />
   double:{{ double }} {{ $store.getters.double }}
   <hr />
