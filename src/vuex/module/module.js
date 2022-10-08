@@ -8,6 +8,7 @@ export default class Module {
   }
 
   addChild(key, module) {
+    console.log(key)
     this._children[key] = module
   }
 
@@ -17,5 +18,23 @@ export default class Module {
 
   forEachChild(fn) {
     forEachValue(this._children, fn)
+  }
+
+  forEachGetter(fn) {
+    if (this._raw.getters) {
+      forEachValue(this._raw.getters, fn)
+    }
+  }
+
+  forEachMutation(fn) {
+    if (this._raw.mutations) {
+      forEachValue(this._raw.mutations, fn)
+    }
+  }
+
+  forEachAction(fn) {
+    if (this._raw.actions) {
+      forEachValue(this._raw.actions, fn)
+    }
   }
 }

@@ -8,7 +8,9 @@ function add() {
 }
 
 function asyncAdd() {
-  store.dispatch('asyncAdd', 1)
+  store.dispatch('asyncAdd', 1).then(() => {
+    alert('ok')
+  })
 }
 
 const count = computed(() => store.state.count)
