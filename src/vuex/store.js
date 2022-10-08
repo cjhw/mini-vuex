@@ -105,10 +105,24 @@ export default class Store {
     resetStoreState(store, state)
 
     console.log(store)
+
+    store._subscribes = []
+    options.plugins.forEach((plugin) => plugin(store))
+  }
+
+  subscribe(fn) {
+    this._subscribes.push(fn)
   }
 
   get state() {
     return this._state.data
+  }
+
+  replaceState(newState) {
+    // 严格模式不能直接修改状态 所以用_withCommit包裹
+    this._withCommit(() => {
+      this._state.data = newState
+    })
   }
 
   _withCommit(fn) {
@@ -123,6 +137,7 @@ export default class Store {
     this._withCommit(() => {
       entry && entry.forEach((handler) => handler(payload))
     })
+    this._subscribes.forEach((sub) => sub({ type, payload }, this.state))
   }
 
   dispatch = (type, payload) => {
