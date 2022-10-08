@@ -14,6 +14,10 @@ function asyncAdd() {
 const count = computed(() => store.state.count)
 
 const double = computed(() => store.getters.double)
+
+const aCount = computed(() => store.state.aCount.count)
+
+const bCount = computed(() => store.state.bCount.count)
 </script>
 
 <template>
@@ -25,6 +29,10 @@ const double = computed(() => store.getters.double)
   同步修改: <button @click="add">+1</button>
   <hr />
   异步修改: <button @click="asyncAdd">+1</button>
+  <hr />
+  a模块: {{ aCount }}
+  <hr />
+  b模块: {{ bCount }}
 </template>
 
 <style scoped>
